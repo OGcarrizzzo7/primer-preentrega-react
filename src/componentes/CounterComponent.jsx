@@ -1,18 +1,25 @@
-import {useState} from 'react'
+import React, { useEffect, useState } from 'react';
 
-export default function CounterComponent() {
+const CounterComponent = ({ productosEnCarrito }) => {
+    const [cantidadTotal, setCantidadTotal] = useState(0);
+    const [precioTotal, setPrecioTotal] = useState(0);
 
-const [contador, setContador]=useState(0);
+    useEffect(() => {
+        // Calcular la cantidad total de productos en el carrito
+        const nuevaCantidadTotal = productosEnCarrito.reduce((total, producto) => total + producto.cantidad, 0);
+        setCantidadTotal(nuevaCantidadTotal);
 
-const handleClick = () => {
-    setContador(contador + 1);
-}
+        // Calcular el precio total sumando los precios de los productos
+        const nuevoPrecioTotal = productosEnCarrito.reduce((total, producto) => total + producto.precio * producto.cantidad, 0);
+        setPrecioTotal(nuevoPrecioTotal);
+    }, [productosEnCarrito]);
 
     return (
-    <>
-    <h4>contador</h4>
-        <p>{contador}</p>
-        <button onClick={handleClick}>+</button>
-        </>
+        <div>
+            <p>Cantidad total de productos: {cantidadTotal}</p>
+            <p>Precio total: ${precioTotal.toFixed(2)}</p>
+        </div>
     );
-}
+};
+
+export default CounterComponent;
