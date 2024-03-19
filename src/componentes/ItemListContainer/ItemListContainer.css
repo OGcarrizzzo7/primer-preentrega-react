@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@600&display=swap');
+
+div h1{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-style: italic;
+    color: white;
+}
