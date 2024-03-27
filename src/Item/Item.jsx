@@ -1,8 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; 
+import { useNavigate, Link } from 'react-router-dom'; 
 import './Item.css';
 
 const Item = ({ id, name, img, price, stock }) => {
+    const navigate = useNavigate();
+
+    const handleClick = (id) => {
+        navigate(`/producto/${id}`);
+    }
+
     return (
         <article className='CardItem'>
             <header className='Header'>
@@ -22,7 +28,8 @@ const Item = ({ id, name, img, price, stock }) => {
                 </p>
             </section>
             <footer className='ItemFooter'>
-                <Link to={`/item/${product.id}`} className='Option'>Ver Detalle</Link>
+                {}
+                <Link to={`/producto/${id}`} className='Option'>Ver Detalle</Link>
             </footer>
         </article>
     );
