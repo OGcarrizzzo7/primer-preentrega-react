@@ -1,36 +1,44 @@
-import './ItemDetailContainer.css';
-import { useState, useEffect } from 'react';
-import { getProductById } from '../../../asyncMock';
+import React, { useState, useEffect } from 'react';
 import ItemDetail from '../ItemDetail/ItemDetail';
 import { useParams } from 'react-router-dom';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from '../../services/firebase/firebaseConfig';
+import './ItemDetailContainer.css';
 
 const ItemDetailContainer = () => {
     const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     const { itemId } = useParams();
 
     useEffect(() => {
-        console.log("Item ID:", itemId); 
-        getProductById(itemId)
+        setLoading(true);
+
+        const docRef = doc(db, 'products', itemId);
+
+        getDoc(docRef)
             .then(response => {
-                console.log("Product details:", response); 
-                setProduct(response);
+                const data = response.data();
+                const productAdapted = { id: response.id, ...data };
+                setProduct(productAdapted);
             })
             .catch(error => {
-                console.error(error);
+                console.log(error);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     }, [itemId]);
 
-    console.log("Product state:", product); 
-
-    if (!product) {
-        return <div>Loading...</div>; 
-    }
-
     return (
-        <div className='ItemDetailContainer'>
-            <ItemDetail {...product} />
+        <div className="item-detail-container">
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <ItemDetail product={product} />
+            )}
         </div>
     );
-}
+};
 
 export default ItemDetailContainer;
